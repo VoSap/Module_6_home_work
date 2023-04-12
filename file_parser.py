@@ -53,6 +53,7 @@ FOLDERS = []
 EXTENSIONS = set()
 UNKNOWN = set()
 
+
 def get_extensions(filename: str) -> str:
     return Path(filename).suffix[1:].upper()
 
@@ -68,16 +69,26 @@ def scan(folder: Path):
         # Работа с файлами
         ext = get_extensions(item.name) # берем расширение файла
         full_name = folder / item.name # берем полный путь до файла
-        if not ext:
-            OTHERS_FILES.append(full_name)
-        else:
+        if ext:
             try:
                 container = REGISTER_EXTENSION[ext]
                 EXTENSIONS.add(ext)
                 container.append(full_name)
             except KeyError:
-                UNKNOWN.add(ext)
                 OTHERS_FILES.append(full_name)
+                UNKNOWN.add(ext)
+
+
+        #     container = REGISTER_EXTENSION[ext]
+        #     if container is not None:
+        #         EXTENSIONS.add(ext)
+        #         container.append(full_name)
+        #     else:
+        #         OTHERS_FILES.append(full_name)
+        #         UNKNOWN.add(ext)
+        # else:
+        #     OTHERS_FILES.append(full_name)
+
 
 if __name__ == '__main__':
     folder_for_scan = sys.argv[1]
